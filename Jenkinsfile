@@ -10,7 +10,7 @@ pipeline {
     //   KUBECONFIG = credentials('kubeConfig')
     
     ORG_GRADLE_PROJECT_ARTIFACTORY = credentials('registry-docker')
-    ORG_PROJECT_ARTIFACTORY_USR = credentials('rt-artifactory')
+    ORG_PROJECT_ARTIFACTORY = credentials('rt-artifactory')
     DOCKER_UPLOAD_ARTIFACTORY = 'aditya0301'
     appVersion = "0.1.0-SNAPSHOT" 
     HELM_UPLOAD_ARTIFACTORY = 'https://rt.artifactory.tio.systems/artifactory/helm-stmj-tnt-services-local'
