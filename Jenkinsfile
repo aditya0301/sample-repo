@@ -7,6 +7,7 @@ pipeline {
   }
 
   environment {
+    TEST = "test"
     //   KUBECONFIG = credentials('kubeConfig')
     //   ORG_GRADLE_PROJECT_ARTIFACTORY = credentials('artifactory')
     //   DOCKER_UPLOAD_ARTIFACTORY = 'docker-stmj-tnt-services-local.rt.artifactory.tio.systems'
