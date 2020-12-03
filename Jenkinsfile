@@ -9,8 +9,9 @@ pipeline {
   environment {
     TEST = "test"
     //   KUBECONFIG = credentials('kubeConfig')
-    //   ORG_GRADLE_PROJECT_ARTIFACTORY = credentials('artifactory')
-    //   DOCKER_UPLOAD_ARTIFACTORY = 'docker-stmj-tnt-services-local.rt.artifactory.tio.systems'
+    
+    ORG_GRADLE_PROJECT_ARTIFACTORY = credentials('registry-docker')
+    DOCKER_UPLOAD_ARTIFACTORY = 'aditya0301'
     //   HELM_UPLOAD_ARTIFACTORY = 'https://rt.artifactory.tio.systems/artifactory/helm-stmj-tnt-services-local'
    }
 
@@ -25,9 +26,9 @@ pipeline {
 
     stage ('Build') {
       steps {
-        script {
-          env.appVersion = sh(returnStdout: true, script: "cat build.gradle | grep ^version | awk '{print \$3}' | tr -d \"'\n\"")
-        }
+        // script {
+        //   env.appVersion = sh(returnStdout: true, script: "cat build.gradle | grep ^version | awk '{print \$3}' | tr -d \"'\n\"")
+        // }
         sh 'sleep 5'
         // sh 'sh gradlew clean compileJava'
         // sh 'sh gradlew clean compileTestJava'
@@ -49,7 +50,7 @@ pipeline {
       steps {
         sh 'sleep 5'
         // sh 'sh gradlew jar unpack'
-        // sh label: "Build Docker Image", script: "docker build -t ${DOCKER_UPLOAD_ARTIFACTORY}/declaration-questionnaire-service:${env.appVersion} -t ${DOCKER_UPLOAD_ARTIFACTORY}/declaration-questionnaire-service:latest ."
+        sh label: "Build Docker Image", script: "docker build -t ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:${env.appVersion} -t ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:latest ."
       }
     }
 
@@ -58,10 +59,9 @@ pipeline {
         expression { return params.publish }
       }
       steps {
-        sh 'sleep 5'
-        // sh "docker login -u ${ORG_GRADLE_PROJECT_ARTIFACTORY_USR} -p ${ORG_GRADLE_PROJECT_ARTIFACTORY_PSW} ${DOCKER_UPLOAD_ARTIFACTORY}"
-        // sh label:'Docker Push', script:"docker push ${DOCKER_UPLOAD_ARTIFACTORY}/declaration-questionnaire-service"
-        // sh label:'Docker Cleanup', script:"docker rmi -f ${DOCKER_UPLOAD_ARTIFACTORY}/declaration-questionnaire-service:latest ${DOCKER_UPLOAD_ARTIFACTORY}/declaration-questionnaire-service:${env.appVersion}"
+        sh "docker login -u ${ORG_GRADLE_PROJECT_ARTIFACTORY_USR} -p ${ORG_GRADLE_PROJECT_ARTIFACTORY_PSW}"
+        sh label:'Docker Push', script:"docker push ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo"
+        sh label:'Docker Cleanup', script:"docker rmi -f ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:latest ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:${env.appVersion}"
       }
     }
 
