@@ -12,6 +12,7 @@ pipeline {
     
     ORG_GRADLE_PROJECT_ARTIFACTORY = credentials('registry-docker')
     DOCKER_UPLOAD_ARTIFACTORY = 'aditya0301'
+    appVersion = "0.1.0-SNAPSHOT" 
     //   HELM_UPLOAD_ARTIFACTORY = 'https://rt.artifactory.tio.systems/artifactory/helm-stmj-tnt-services-local'
    }
 
@@ -26,7 +27,7 @@ pipeline {
 
     stage ('Build') {
       steps {
-        env.appVersion = "echo 0.1.0-SNAPSHOT"       
+              
         sh 'sleep 5'
         // sh 'sh gradlew clean compileJava'
         // sh 'sh gradlew clean compileTestJava'
@@ -48,7 +49,7 @@ pipeline {
       steps {
         sh 'sleep 5'
         // sh 'sh gradlew jar unpack'
-        sh label: "Build Docker Image", script: "docker build -t ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:${env.appVersion} -t ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:latest ."
+        sh label: "Build Docker Image", script: "docker build -t ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:${appVersion} -t ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:latest ."
       }
     }
 
@@ -59,7 +60,7 @@ pipeline {
       steps {
         sh "docker login -u ${ORG_GRADLE_PROJECT_ARTIFACTORY_USR} -p ${ORG_GRADLE_PROJECT_ARTIFACTORY_PSW}"
         sh label:'Docker Push', script:"docker push ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo"
-        sh label:'Docker Cleanup', script:"docker rmi -f ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:latest ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:${env.appVersion}"
+        sh label:'Docker Cleanup', script:"docker rmi -f ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:latest ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:${appVersion}"
       }
     }
 
