@@ -1,4 +1,4 @@
-def appVersion='0.1.0-SNAPSHOT'
+def env.appVersion='0.1.0-SNAPSHOT'
 pipeline {
   agent any
 
