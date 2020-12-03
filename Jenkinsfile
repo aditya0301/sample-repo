@@ -7,13 +7,13 @@ pipeline {
   }
 
   environment {
-    TEST = "test"
     //   KUBECONFIG = credentials('kubeConfig')
     
     ORG_GRADLE_PROJECT_ARTIFACTORY = credentials('registry-docker')
+    ORG_PROJECT_ARTIFACTORY_USR = credentials('rt-artifactory')
     DOCKER_UPLOAD_ARTIFACTORY = 'aditya0301'
     appVersion = "0.1.0-SNAPSHOT" 
-    //   HELM_UPLOAD_ARTIFACTORY = 'https://rt.artifactory.tio.systems/artifactory/helm-stmj-tnt-services-local'
+    HELM_UPLOAD_ARTIFACTORY = 'https://rt.artifactory.tio.systems/artifactory/helm-stmj-tnt-services-local'
    }
 
 
@@ -28,7 +28,7 @@ pipeline {
     stage ('Build') {
       steps {
               
-        sh 'sleep 5'
+        sh 'sleep 2'
         // sh 'sh gradlew clean compileJava'
         // sh 'sh gradlew clean compileTestJava'
       }
@@ -39,7 +39,7 @@ pipeline {
         expression { return params.runTests }
       }
       steps {
-        sh 'sleep 5'
+        sh 'sleep 2'
         // sh 'sh gradlew clean test'
         // junit '**/build/test-results/test/**.xml'
       }
@@ -47,7 +47,6 @@ pipeline {
 
     stage ('Generate Artifacts') {
       steps {
-        sh 'sleep 5'
         // sh 'sh gradlew jar unpack'
         sh label: "Build Docker Image", script: "docker build -t ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:${appVersion} -t ${DOCKER_UPLOAD_ARTIFACTORY}/sample-repo:latest ."
       }
@@ -69,9 +68,8 @@ pipeline {
         expression { return params.publish }
       }
       steps {
-        sh 'sleep 5'
-        // sh "helm plugin install https://github.com/belitre/helm-push-artifactory-plugin --version 1.0.1"
-        // sh "helm repo add tnt-local ${HELM_UPLOAD_ARTIFACTORY} --username ${ORG_GRADLE_PROJECT_ARTIFACTORY_USR} --password ${ORG_GRADLE_PROJECT_ARTIFACTORY_PSW}"
+        sh "helm plugin install https://github.com/belitre/helm-push-artifactory-plugin --version 1.0.1"
+        sh "helm repo add tnt-local ${HELM_UPLOAD_ARTIFACTORY} --username ${ORG_PROJECT_ARTIFACTORY_USR} --password ${ORG_PROJECT_ARTIFACTORY_PSW}"
       }
     }
 
