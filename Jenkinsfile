@@ -28,7 +28,7 @@ pipeline {
       steps {
         script {
         //   env.appVersion = sh(returnStdout: true, script: "cat build.gradle | grep ^version | awk '{print \$3}' | tr -d \"'\n\"")
-            env.appVersion = sh(returnStdout: true, script: "echo '0.1.0-SNAPSHOT'"'\n\"")
+            env.appVersion = sh(returnStdout: true, script: "echo 0.1.0-SNAPSHOT"'\n\"")
         }
         sh 'sleep 5'
         // sh 'sh gradlew clean compileJava'
