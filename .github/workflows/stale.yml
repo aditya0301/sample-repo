@@ -6,8 +6,16 @@
 name: Mark stale issues and pull requests
 
 on:
-  schedule:
-  - cron: '46 06 * * *'
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Person to greet'
+        # Default value if no value is explicitly provided
+        default: 'World'
+        # Input has to be provided for the workflow to run
+        required: false
 
 jobs:
   stale:
@@ -25,3 +33,4 @@ jobs:
         stale-pr-message: 'Stale pull request message'
         stale-issue-label: 'no-issue-activity'
         stale-pr-label: 'no-pr-activity'
+
