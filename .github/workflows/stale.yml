@@ -38,6 +38,7 @@ jobs:
         days-before-pr-close: 2
         delete-branch: false
         exempt-draft-pr: false
+        remove-stale-when-updated: false
         
         
 
